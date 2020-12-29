@@ -11,12 +11,13 @@ from torch.utils.data import DataLoader
 from models.resnet18 import ResNet18
 from models.hill_model import HillModel
 from dataset import Cifar100Dataset
-from argpar import get_args
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QLabel, QPushButton, QDialog, QRadioButton, QApplication
 from PyQt5.QtGui import *
+
+import argparse
 
 logging.basicConfig(level=logging.DEBUG,#控制台打印的日志级别
                     filename='train.log',
@@ -27,9 +28,11 @@ logging.basicConfig(level=logging.DEBUG,#控制台打印的日志级别
                     #日志格式
                     )
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
 
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow, args):
+
+        self.args = args
         self.init()
         ROW = (self.gallery_size + 4) // 5
 
@@ -95,9 +98,6 @@ class Ui_MainWindow(object):
 
     #数据初始化
     def init(self):
-
-        self.args = get_args()
-
         # set torch random seed
         torch.manual_seed(2345)
         torch.cuda.manual_seed_all(2345)
@@ -272,19 +272,29 @@ class Ui_MainWindow(object):
 class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
     #__init__:析构函数，也就是类被创建后就会预先加载的项目。
     # 马上运行，这个方法可以用来对你的对象做一些你希望的初始化。
-    def __init__(self):
+    def __init__(self, args):
         #这里需要重载一下mywindow，同时也包含了QtWidgets.QMainWindow的预加载项。
         super(mywindow, self).__init__()
-        self.setupUi(self)
+        self.setupUi(self, args = args)
 
 if __name__ == '__main__':
 
+    parser = argparse.ArgumentParser(description='PyTorch Training')
+    parser.add_argument('--eval_time', default=2000, type=int, help='number of images between two evaluations')
+    parser.add_argument('--train_batch', default=2, type=int, help='train batchsize')
+    parser.add_argument('--val_batch', default=2, type=int, help='val batchsize')
+    parser.add_argument('--train_class_num', default=10, type=int, help='number of train class')
+    parser.add_argument('--gallery_size', default=10, type=int, help='size of gallery set')
+    parser.add_argument('--max_epoch', default=6, type=int, help='train epochs')
+    parser.add_argument('--is_simu', default=1, type=int, help='train mode')
+    args = parser.parse_args()
     # QApplication相当于main函数，也就是整个程序（很多文件）的主入口函数。
     # 对于GUI程序必须至少有一个这样的实例来让程序运行。
+    logging.info(args)
     app = QtWidgets.QApplication(sys.argv)
     #生成 mywindow 类的实例。
-    window = mywindow()
-    if window.is_simu:
+    window = mywindow(args)
+    if args.is_simu == 1:
         window.train_simu()
     else:
         window.show()
