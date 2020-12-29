@@ -10,7 +10,7 @@ Image classification task using the human-in-the-loop. During the training stage
 
 - Python (3.7)
 - Pytorch (1.7.0)
-- PyQt5 & PyQt5-tools （https://blog.csdn.net/zyngoo/article/details/85880572）(use pip install)
+- PyQt5 & PyQt5-tools （https://blog.csdn.net/zyngoo/article/details/85880572) use pip install
 
 **datasets:** CIFAR100. The datasets can be downloaded by following the steps listed at https://www.robots.ox.ac.uk/~vgg/decathlon/#download. 
 
