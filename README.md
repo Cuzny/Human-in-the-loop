@@ -1,12 +1,12 @@
 # Human-in-the-loop
 
-#### Abstract
+### Abstract
 
 Image classification task using the human-in-the-loop. During the training stage, the feature extraction network is fixed while the classification network is iteratively updated according to the formula based on paper: Human-In-The-Loop Person Re-Identification[https://arxiv.org/abs/1612.01345]
 
 
 
-#### Requirements
+### Requirements
 
 - Python (3.7)
 - Pytorch (1.7.0)
@@ -20,13 +20,8 @@ Classification network: , trained on the last 10 classes of CIFAR100 (Human-in-t
 
 
 
-#### Training models
+### Training models
 
-To simulation:
-
-```
-$ python train.py --eval_time 2000 --train_batch 2 --val_batch 2 --train_class_num 10 --gallery_size 10 --max_epoch 6 --is_simu 1
-```
 
 To select by human:
 
